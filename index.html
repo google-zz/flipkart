@@ -137,6 +137,18 @@
       cursor: pointer;
       font-size: 1em;
     }
+
+    #claimBtn {
+      display: none;
+      background: #2874f0;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1.2em;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -169,6 +181,7 @@
   </div>
 
   <button id="spinBtn" class="spin-btn hidden">🎡 Spin Now</button>
+  <button id="claimBtn">Claim Prize</button>
 
   <div id="result"></div>
 
@@ -182,6 +195,7 @@
     const gameArea = document.getElementById("gameArea");
     const wheel = document.getElementById("wheel");
     const spinBtn = document.getElementById("spinBtn");
+    const claimBtn = document.getElementById("claimBtn");
     const result = document.getElementById("result");
 
     let spins = 0;
@@ -212,7 +226,7 @@
       if (spins === 1) {
         // Always lose first spin
         degree = 1800 + 270; // lands on "Nothing"
-      } else if (spins < 3) {
+      } else if (spins === 2) {
         // Random spin
         degree = 1800 + Math.floor(Math.random() * 360);
       } else {
@@ -230,9 +244,10 @@
           result.textContent = "Almost there! Watch another ad...";
         } else if (spins === 3) {
           result.textContent = hasWon
-            ? "🎉 Congratulations! You won 🎁 We will reach back to you soon."
+            ? "🎉 Congratulations! You won 🎁"
             : "❌ Better luck next time!";
           spinBtn.style.display = "none";
+          claimBtn.style.display = "inline-block";
         }
 
         // Redirect to ad page after each spin (except last result message)
@@ -242,6 +257,11 @@
           }, 2000);
         }
       }, 4000);
+    });
+
+    claimBtn.addEventListener("click", () => {
+      result.textContent = "✅ We will reach back to you soon!";
+      claimBtn.style.display = "none";
     });
   </script>
 </body>
