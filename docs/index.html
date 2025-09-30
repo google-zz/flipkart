@@ -18,19 +18,19 @@
   #result{ margin-top:14px; font-size:1.05rem; color:#d32f2f; min-height:24px;}
   #instructions{ margin-top:8px; color:#333 }
   #retryBtn{ display:none; margin-top:12px; padding:10px 16px; background:#2874f0; color:white; border:0; border-radius:8px; cursor:pointer;}
-  #ad-slot{ margin:18px auto; width:320px; height:100px; background:#fff; border:2px dashed #ccc; display:flex; align-items:center; justify-content:center; color:#666; }
   #shareBlock{ display:none; margin-top:16px; }
   .share-btn{ background:#25D366; color:#fff; padding:10px 16px; border-radius:8px; border:0; cursor:pointer; margin:6px; }
   #confirmShare{ background:#1976d2; }
   #userForm{ display:none; margin-top:14px; max-width:320px; margin-left:auto;margin-right:auto; text-align:left; }
   #userForm input{ width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #ccc; }
   footer{ padding:14px; font-size:0.85rem; color:#666; }
+  canvas#confetti-canvas{ position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:999; }
 </style>
 </head>
 <body>
   <header>
-  <img src="flipkart.png" alt="Flipkart Logo"> Big Billion Days – Spin &amp; Win
-</header>
+    <img src="flipkart.png" alt="Flipkart Logo"> Big Billion Days – Spin &amp; Win
+  </header>
 
   <main>
     <p>You have <strong>3 spins</strong>.</p>
@@ -50,8 +50,6 @@
     <button id="spinBtn" class="spin-btn">Spin Now</button>
     <div id="result"></div>
     <div id="instructions"></div>
-
-    <div id="ad-slot">Ad slot</div>
     <button id="retryBtn">Retry</button>
 
     <div id="shareBlock">
@@ -74,6 +72,9 @@
     © Spin & Win Project
   </footer>
 
+<canvas id="confetti-canvas"></canvas>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
 (function(){
   const wheel = document.getElementById('wheel');
@@ -94,14 +95,17 @@
       result.textContent = '❌ Oops! Better luck next time.';
       instructions.textContent = 'Scroll down and click Retry to spin again.';
       retryBtn.style.display = 'inline-block';
+      scrollToBottom();
     } else if (state.spins === 2) {
-      result.textContent = '❌ Again nothing. Scroll down and Retry after the ad.';
-      instructions.textContent = 'Scroll down and click Retry to spin again.';
+      result.textContent = '❌ Again nothing.';
+      instructions.textContent = 'Scroll down and Retry after ad.';
       retryBtn.style.display = 'inline-block';
+      scrollToBottom();
     } else if (state.spins >= 3) {
       result.textContent = '🎉 Congratulations! You won an iPhone 🎁';
       retryBtn.style.display = 'none';
       shareBlock.style.display = 'block';
+      fireConfetti();
     }
   }
 
@@ -111,6 +115,21 @@
       wheel.style.transform = `rotate(${degree}deg)`;
       setTimeout(resolve, 4200);
     });
+  }
+
+  function scrollToBottom() {
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  }
+
+  function fireConfetti() {
+    const duration = 3 * 1000;
+    const end = Date.now() + duration;
+    (function frame() {
+      confetti({ particleCount: 6, spread: 70, origin: { y: 0.6 } });
+      if (Date.now() < end) {
+        requestAnimationFrame(frame);
+      }
+    })();
   }
 
   spinBtn.addEventListener('click', async () => {
@@ -127,10 +146,25 @@
   });
 
   retryBtn.addEventListener('click', () => {
-    setTimeout(() => {
-      spinBtn.disabled = false;
-      retryBtn.style.display = 'none';
-    }, 2000);
+    // Redirect to ad page
+    window.open("https://example.com/ad-page", "_blank");
+
+    let time = 10;
+    retryBtn.disabled = true;
+    retryBtn.textContent = `Retry (${time})`;
+
+    const timer = setInterval(() => {
+      time--;
+      retryBtn.textContent = `Retry (${time})`;
+      if(time <= 0){
+        clearInterval(timer);
+        retryBtn.disabled = false;
+        retryBtn.textContent = "Retry";
+        spinBtn.disabled = false;
+        retryBtn.style.display = "none";
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    },1000);
   });
 
   shareNow.addEventListener('click', () => {
@@ -162,4 +196,3 @@
 </script>
 </body>
 </html>
-
