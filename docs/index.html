@@ -182,7 +182,6 @@
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
 
       if (spins < 3) {
-        // open ad page in new tab (replace with your ad URL)
         setTimeout(() => {
           try { window.open('https://example.com/ad-page', '_blank'); } catch(e){}
           spinBtn.disabled = false;
@@ -207,13 +206,21 @@
     const name = document.getElementById('name').value.trim();
     const mobile = document.getElementById('mobile').value.trim();
     if (!name || !mobile) { alert('Please enter name and mobile'); return; }
-    fetch('https://httpbin.org/post', {
+
+    // 🔗 Send to your Google Apps Script Web App
+    fetch('https://script.google.com/macros/s/AKfycbz3w4LyArVH5oz6O1PaU-T9_Sac8ewbOAFsq51-uhPhG5hnnOW5MaSd0MZSSYYlbR7A/exec', {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({name,mobile})
+      headers: { 'Content-Type':'application/json' },
+      body: JSON.stringify({ name, mobile })
     })
-      .then(()=>{ alert('✅ Submitted successfully!'); userForm.style.display='none'; userSubmitted=true; })
-      .catch(()=>{ alert('Submission failed — try again later.'); });
+    .then(() => {
+      alert('✅ Submitted successfully!'); 
+      userForm.style.display='none'; 
+      userSubmitted=true; 
+    })
+    .catch(() => { 
+      alert('Submission failed — try again later.'); 
+    });
   });
 })();
 </script>
