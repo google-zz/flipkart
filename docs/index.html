@@ -5,42 +5,174 @@
 <meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Flipkart Spin & Win</title>
 <style>
-  body { font-family: Arial, sans-serif; background:#f4f6f8; margin:0; padding:0; text-align:center; }
-  header{ padding:12px; background:#2874f0;color:#fff; display:flex;align-items:center;justify-content:center; gap:10px;}
-  header img{height:34px}
-  main{padding:18px}
-  .wheel-container{ width:90vw; max-width:360px; height:90vw; max-height:360px; margin:18px auto; position:relative;}
-  .wheel{ width:100%; height:100%; border-radius:50%; border:10px solid #2874f0; background: conic-gradient(#ffeb3b 0 60deg, #2874f0 60deg 120deg, #ff7043 120deg 180deg, #43a047 180deg 240deg, #9c27b0 240deg 300deg, #ff9800 300deg 360deg); transition: transform 4s cubic-bezier(.2,.8,.2,1); box-shadow:0 6px 18px rgba(0,0,0,.12); position:relative;}
-  .pointer{ position:absolute; top:-36px; left:50%; transform:translateX(-50%); width:0; height:0; border-left:18px solid transparent; border-right:18px solid transparent; border-bottom:30px solid #d32f2f; }
-  .label{ position:absolute; top:50%; left:50%; transform-origin:0 -45%; font-weight:700; color:#fff; font-size:0.95rem; width:80px; text-align:center; }
-  .label.small{ font-size:0.8rem;width:70px }
-  .spin-btn{ margin-top:16px; background:#ffeb3b; color:#2874f0; padding:12px 22px; border-radius:10px; border:0; font-weight:800; cursor:pointer; }
-  #result{ margin-top:14px; font-size:1.05rem; color:#d32f2f; min-height:24px;}
-  #instructions{ margin-top:8px; color:#333 }
-  #retryBtn{ display:none; margin-top:12px; padding:10px 16px; background:#2874f0; color:white; border:0; border-radius:8px; cursor:pointer;}
-  #shareBlock{ display:none; margin-top:16px; }
-  .share-btn{ background:#25D366; color:#fff; padding:10px 16px; border-radius:8px; border:0; cursor:pointer; margin:6px; }
-  #confirmShare{ background:#1976d2; }
-  #userForm{ display:none; margin-top:14px; max-width:320px; margin-left:auto;margin-right:auto; text-align:left; }
-  #userForm input{ width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #ccc; }
-  footer{ padding:14px; font-size:0.85rem; color:#666; }
-  canvas#confetti-canvas{ position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:999; }
+  body {
+    font-family: Arial, sans-serif;
+    background:#f4f6f8;
+    margin:0;
+    padding:0;
+    text-align:center;
+  }
+
+  header {
+    padding:12px;
+    background:#2874f0;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+  }
+
+  header img {
+    height:34px;
+  }
+
+  main {
+    padding:18px;
+  }
+
+  .wheel-container {
+    width:90vw;
+    max-width:360px;
+    height:90vw;
+    max-height:360px;
+    margin:18px auto;
+    position:relative;
+  }
+
+  .wheel {
+    width:100%;
+    height:100%;
+    border-radius:50%;
+    border:10px solid #2874f0;
+    background: conic-gradient(
+      #ffffff 0 60deg,       /* Blank slice */
+      #2874f0 60deg 120deg,  /* iPad */
+      #ff7043 120deg 180deg, /* PS5 */
+      #43a047 180deg 240deg, /* Smartwatch */
+      #9c27b0 240deg 300deg, /* Nothing */
+      #ff9800 300deg 360deg  /* iPhone */
+    );
+    transition: transform 4s cubic-bezier(.2,.8,.2,1);
+    box-shadow:0 6px 18px rgba(0,0,0,.12);
+    position:relative;
+  }
+
+  .pointer {
+    position:absolute;
+    top:-36px;
+    left:50%;
+    transform:translateX(-50%);
+    width:0;
+    height:0;
+    border-left:18px solid transparent;
+    border-right:18px solid transparent;
+    border-bottom:30px solid #d32f2f;
+  }
+
+  .spin-btn {
+    margin-top:16px;
+    background:#ffeb3b;
+    color:#2874f0;
+    padding:12px 22px;
+    border-radius:10px;
+    border:0;
+    font-weight:800;
+    cursor:pointer;
+  }
+
+  #result {
+    margin-top:14px;
+    font-size:1.05rem;
+    color:#d32f2f;
+    min-height:24px;
+  }
+
+  #instructions {
+    margin-top:8px;
+    color:#333;
+  }
+
+  #retryBtn {
+    display:none;
+    margin-top:12px;
+    padding:10px 16px;
+    background:#2874f0;
+    color:white;
+    border:0;
+    border-radius:8px;
+    cursor:pointer;
+  }
+
+  #shareBlock {
+    display:none;
+    margin-top:16px;
+  }
+
+  .share-btn {
+    background:#25D366;
+    color:#fff;
+    padding:10px 16px;
+    border-radius:8px;
+    border:0;
+    cursor:pointer;
+    margin:6px;
+  }
+
+  #confirmShare {
+    background:#1976d2;
+  }
+
+  #userForm {
+    display:none;
+    margin-top:14px;
+    max-width:320px;
+    margin-left:auto;
+    margin-right:auto;
+    text-align:left;
+  }
+
+  #userForm input {
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border-radius:6px;
+    border:1px solid #ccc;
+  }
+
+  footer {
+    padding:14px;
+    font-size:0.85rem;
+    color:#666;
+  }
+
+  canvas#confetti-canvas {
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    pointer-events:none;
+    z-index:999;
+  }
+
+  /* Centered icons */
   #wheel img.icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 50px;   /* adjust size of images */
-  height: 50px;
-  transform-origin: 0 -45%; /* same anchor point as text */
-}
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 55px;
+    height: 55px;
+    transform-origin: 0 -45%;
+  }
 
-#wheel img.icon.small {
-  width: 40px;
-  height: 40px;
-}
-
+  #wheel img.icon.small {
+    width: 45px;
+    height: 45px;
+  }
 </style>
 </head>
+
 <body>
   <header>
     <img src="flipkart.png" alt="Flipkart Logo"> Big Billion Days – Spin &amp; Win
@@ -51,14 +183,15 @@
 
     <div class="wheel-container">
       <div class="pointer"></div>
-<div id="wheel" class="wheel">
-  <img src="iphone.png" class="icon" style="transform: rotate(30deg) translateY(-120px) rotate(-30deg);" alt="iPhone">
-  <img src="ipad.png" class="icon small" style="transform: rotate(90deg) translateY(-120px) rotate(-90deg);" alt="iPad">
-  <img src="ps5.png" class="icon small" style="transform: rotate(150deg) translateY(-120px) rotate(-150deg);" alt="PS5">
-  <img src="watch.png" class="icon small" style="transform: rotate(210deg) translateY(-120px) rotate(-210deg);" alt="Smartwatch">
-  <img src="nothing.png" class="icon small" style="transform: rotate(270deg) translateY(-120px) rotate(-270deg);" alt="Nothing">
-  <img src="speaker.png" class="icon small" style="transform: rotate(330deg) translateY(-120px) rotate(-330deg);" alt="Speaker">
-</div>
+
+      <div id="wheel" class="wheel">
+        <!-- Blank slice at top (no image) -->
+        <img src="ipad.png" class="icon small" style="transform: rotate(90deg) translateY(-70px) rotate(-90deg);" alt="">
+        <img src="ps5.png" class="icon small" style="transform: rotate(150deg) translateY(-70px) rotate(-150deg);" alt="">
+        <img src="watch.png" class="icon small" style="transform: rotate(210deg) translateY(-70px) rotate(-210deg);" alt="">
+        <img src="nothing.png" class="icon small" style="transform: rotate(270deg) translateY(-70px) rotate(-270deg);" alt="">
+        <img src="iphone.png" class="icon" style="transform: rotate(330deg) translateY(-70px) rotate(-330deg);" alt="">
+      </div>
     </div>
 
     <button id="spinBtn" class="spin-btn">Spin Now</button>
@@ -86,128 +219,128 @@
     © Spin & Win Project
   </footer>
 
-<canvas id="confetti-canvas"></canvas>
+  <canvas id="confetti-canvas"></canvas>
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<script>
-(function(){
-  const wheel = document.getElementById('wheel');
-  const spinBtn = document.getElementById('spinBtn');
-  const result = document.getElementById('result');
-  const instructions = document.getElementById('instructions');
-  const retryBtn = document.getElementById('retryBtn');
-  const shareBlock = document.getElementById('shareBlock');
-  const shareNow = document.getElementById('shareNow');
-  const confirmShare = document.getElementById('confirmShare');
-  const shareMsg = document.getElementById('shareMsg');
-  const userForm = document.getElementById('userForm');
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-  let state = { spins:0, shareConfirmAttempts:0 };
+  <script>
+  (function(){
+    const wheel = document.getElementById('wheel');
+    const spinBtn = document.getElementById('spinBtn');
+    const result = document.getElementById('result');
+    const instructions = document.getElementById('instructions');
+    const retryBtn = document.getElementById('retryBtn');
+    const shareBlock = document.getElementById('shareBlock');
+    const shareNow = document.getElementById('shareNow');
+    const confirmShare = document.getElementById('confirmShare');
+    const shareMsg = document.getElementById('shareMsg');
+    const userForm = document.getElementById('userForm');
 
-  function refreshUI() {
-    if (state.spins === 1) {
-      result.textContent = '❌ Oops! Better luck next time.';
-      instructions.textContent = 'Scroll down and click Retry to spin again.';
-      retryBtn.style.display = 'inline-block';
-      scrollToBottom();
-    } else if (state.spins === 2) {
-      result.textContent = '❌ Again nothing.';
-      instructions.textContent = 'Scroll down and Retry after ad.';
-      retryBtn.style.display = 'inline-block';
-      scrollToBottom();
-    } else if (state.spins >= 3) {
-      result.textContent = '🎉 Congratulations! You won an iPhone 🎁';
-      retryBtn.style.display = 'none';
-      shareBlock.style.display = 'block';
-      fireConfetti();
+    let state = { spins:0, shareConfirmAttempts:0 };
+
+    function refreshUI() {
+      if (state.spins === 1) {
+        result.textContent = '❌ Oops! Blank — no prize this time.';
+        instructions.textContent = 'Scroll down and click Retry to spin again.';
+        retryBtn.style.display = 'inline-block';
+        scrollToBottom();
+      } else if (state.spins === 2) {
+        result.textContent = '❌ Still blank. Try one more time.';
+        instructions.textContent = 'Scroll down and Retry after ad.';
+        retryBtn.style.display = 'inline-block';
+        scrollToBottom();
+      } else if (state.spins >= 3) {
+        result.textContent = '🎉 Congratulations! You won an iPhone 🎁';
+        retryBtn.style.display = 'none';
+        shareBlock.style.display = 'block';
+        fireConfetti();
+      }
     }
-  }
 
-  function spinTo(degree) {
-    return new Promise((resolve) => {
-      wheel.style.transition = 'transform 4s cubic-bezier(.2,.8,.2,1)';
-      wheel.style.transform = `rotate(${degree}deg)`;
-      setTimeout(resolve, 4200);
+    function spinTo(degree) {
+      return new Promise((resolve) => {
+        wheel.style.transition = 'transform 4s cubic-bezier(.2,.8,.2,1)';
+        wheel.style.transform = `rotate(${degree}deg)`;
+        setTimeout(resolve, 4200);
+      });
+    }
+
+    function scrollToBottom() {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function fireConfetti() {
+      const duration = 3 * 1000;
+      const end = Date.now() + duration;
+      (function frame() {
+        confetti({ particleCount: 6, spread: 70, origin: { y: 0.6 } });
+        if (Date.now() < end) {
+          requestAnimationFrame(frame);
+        }
+      })();
+    }
+
+    spinBtn.addEventListener('click', async () => {
+      state.spins++;
+      let degree;
+      if (state.spins === 1 || state.spins === 2) {
+        // stop on blank (top, 0deg)
+        degree = 1800 + 0;
+      } else {
+        // stop on iPhone (at 330deg position)
+        degree = 1800 + 60;
+      }
+      spinBtn.disabled = true;
+      await spinTo(degree);
+      refreshUI();
     });
-  }
 
-  function scrollToBottom() {
-    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-  }
-
-  function fireConfetti() {
-    const duration = 3 * 1000;
-    const end = Date.now() + duration;
-    (function frame() {
-      confetti({ particleCount: 6, spread: 70, origin: { y: 0.6 } });
-      if (Date.now() < end) {
-        requestAnimationFrame(frame);
-      }
-    })();
-  }
-
-  spinBtn.addEventListener('click', async () => {
-    state.spins++;
-    let degree;
-    if (state.spins === 1 || state.spins === 2) {
-      degree = 1800 + 240;
-    } else {
-      degree = 1800 + 60;
-    }
-    spinBtn.disabled = true;
-    await spinTo(degree);
-    refreshUI();
-  });
-
-  retryBtn.addEventListener('click', () => {
-    // Redirect to ad page
-    window.open("https://example.com/ad-page", "_blank");
-
-    let time = 10;
-    retryBtn.disabled = true;
-    retryBtn.textContent = `Retry (${time})`;
-
-    const timer = setInterval(() => {
-      time--;
+    retryBtn.addEventListener('click', () => {
+      window.open("https://example.com/ad-page", "_blank");
+      let time = 10;
+      retryBtn.disabled = true;
       retryBtn.textContent = `Retry (${time})`;
-      if(time <= 0){
-        clearInterval(timer);
-        retryBtn.disabled = false;
-        retryBtn.textContent = "Retry";
-        spinBtn.disabled = false;
-        retryBtn.style.display = "none";
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      const timer = setInterval(() => {
+        time--;
+        retryBtn.textContent = `Retry (${time})`;
+        if(time <= 0){
+          clearInterval(timer);
+          retryBtn.disabled = false;
+          retryBtn.textContent = "Retry";
+          spinBtn.disabled = false;
+          retryBtn.style.display = "none";
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      },1000);
+    });
+
+    shareNow.addEventListener('click', () => {
+      const text = encodeURIComponent('I just won! Try this Spin & Win project.');
+      window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+      shareMsg.textContent = 'Shared. Now click Confirm Share.';
+    });
+
+    confirmShare.addEventListener('click', () => {
+      state.shareConfirmAttempts++;
+      if (state.shareConfirmAttempts === 1) {
+        shareMsg.textContent = 'Share verification failed. Please share again.';
+        alert('Verification failed. Share again and confirm.');
+      } else {
+        shareMsg.textContent = 'Share confirmed. Enter your details.';
+        userForm.style.display = 'block';
+        shareBlock.querySelectorAll('button').forEach(b => b.style.display = 'none');
       }
-    },1000);
-  });
+    });
 
-  shareNow.addEventListener('click', () => {
-    const text = encodeURIComponent('I just won! Try this Spin & Win project.');
-    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
-    shareMsg.textContent = 'Shared. Now click Confirm Share.';
-  });
+    userForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('✅ Submission successful. You will be contacted shortly.');
+      window.open('https://www.example.com/thankyou','_blank');
+    });
 
-  confirmShare.addEventListener('click', () => {
-    state.shareConfirmAttempts++;
-    if (state.shareConfirmAttempts === 1) {
-      shareMsg.textContent = 'Share verification failed. Please share again.';
-      alert('Verification failed. Share again and confirm.');
-    } else {
-      shareMsg.textContent = 'Share confirmed. Enter your details.';
-      userForm.style.display = 'block';
-      shareBlock.querySelectorAll('button').forEach(b => b.style.display = 'none');
-    }
-  });
-
-  userForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    alert('✅ Submission successful. You will be contacted shortly.');
-    window.open('https://www.example.com/thankyou','_blank');
-  });
-
-  wheel.style.transform = 'rotate(0deg)';
-})();
-</script>
+    wheel.style.transform = 'rotate(0deg)';
+  })();
+  </script>
 </body>
 </html>
-
