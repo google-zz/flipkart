@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Hold Page</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #2874f0, #42a5f5);
+    text-align: center;
+    color: white;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  button {
+    background: #ffeb3b;
+    color: #2874f0;
+    border: none;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: none;
+  }
+</style>
+</head>
+<body>
+  <h2>⏳ Please wait 10 seconds...</h2>
+  <p>Loading your next spin...</p>
+  <button id="retryBtn">Retry</button>
+
+  <script>
+    setTimeout(() => {
+      const btn = document.getElementById('retryBtn');
+      btn.style.display = 'inline-block';
+      btn.addEventListener('click', () => {
+        window.location.href = "index.html";
+      });
+    }, 10000);
+  </script>
+</body>
+</html>
