@@ -7,11 +7,11 @@
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: #fff;
+  background: #2874f0; /* blue background for all spins */
   margin: 0;
   padding: 0;
   text-align: center;
-  color: #000;
+  color: #fff;
 }
 header {
   padding: 12px;
@@ -40,10 +40,7 @@ main { padding: 20px; }
   background: #000;
   box-shadow: inset 0 0 12px #000, 0 0 20px gold;
 }
-.icons {
-  position: relative;
-  top: 0;
-}
+.icons { position: relative; top: 0; }
 .icons img {
   display: block;
   width: 100%;
@@ -51,7 +48,7 @@ main { padding: 20px; }
   object-fit: contain;
   background: #000;
 }
-#spinBtn, #retryBtn {
+#spinBtn {
   background: #ffeb3b;
   color: #2874f0;
   padding: 14px 28px;
@@ -62,14 +59,14 @@ main { padding: 20px; }
   font-size: 1.1rem;
   margin-top: 16px;
 }
-#result { margin-top: 18px; font-size: 1.2rem; min-height: 28px; color: #000; }
-#instructions { margin-top: 10px; color: #000; }
+#result { margin-top: 18px; font-size: 1.2rem; min-height: 28px; }
+#instructions { margin-top: 10px; }
 #shareBlock { display: none; margin-top: 16px; }
 .share-btn { background: #25D366; color: #fff; padding: 10px 16px; border-radius: 8px; border: 0; cursor: pointer; margin: 6px; }
 #confirmShare { background: #1976d2; }
 #userForm { display: none; margin-top: 14px; max-width: 320px; margin-left:auto; margin-right:auto; text-align:left; }
 #userForm input { width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #ccc; }
-footer { padding: 14px; font-size: 0.85rem; color: #000; }
+footer { padding: 14px; font-size: 0.85rem; color: #fff; }
 canvas#confetti-canvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:999; }
 .countdown { font-size: 1.3rem; margin-top: 12px; }
 </style>
@@ -113,7 +110,6 @@ canvas#confetti-canvas { position: fixed; top:0; left:0; width:100%; height:100%
 <div id="result"></div>
 <div id="instructions"></div>
 <div class="countdown" id="countdown"></div>
-<button id="retryBtn">Retry</button>
 
 <div id="shareBlock">
   <p><strong>To claim, please share to 5 friends:</strong></p>
@@ -141,7 +137,6 @@ canvas#confetti-canvas { position: fixed; top:0; left:0; width:100%; height:100%
   const spinBtn = document.getElementById('spinBtn');
   const result = document.getElementById('result');
   const instructions = document.getElementById('instructions');
-  const retryBtn = document.getElementById('retryBtn');
   const countdownEl = document.getElementById('countdown');
   const shareBlock = document.getElementById('shareBlock');
   const shareNow = document.getElementById('shareNow');
@@ -166,8 +161,7 @@ canvas#confetti-canvas { position: fixed; top:0; left:0; width:100%; height:100%
     });
   }
 
-  function fireConfetti() {
-    const duration = 3*1000;
+  function fireConfetti(duration=3000) {
     const end = Date.now() + duration;
     (function frame(){
       confetti({ particleCount:6, spread:70, origin:{y:0.6} });
@@ -175,26 +169,18 @@ canvas#confetti-canvas { position: fixed; top:0; left:0; width:100%; height:100%
     })();
   }
 
-  function redirectHold() {
-    // Redirect to hold page with countdown
-    window.location.href = 'hold.html';
-  }
-
   function refreshUI() {
     if(state.spins < 3){
-      result.textContent = '❌ Oops! You did not win this spin.';
+      result.textContent = '❌ Oops! You did not win this spin, try again.';
       instructions.textContent = 'Wait 10 seconds to spin again.';
-      retryBtn.style.display='inline-block';
     }else{
-      result.textContent = '🎉 JACKPOT! You won an iPhone 🎁';
+      result.textContent = '🎉 You won an iPhone! 🎁';
       instructions.textContent = '';
-      retryBtn.style.display='none';
       shareBlock.style.display='block';
-      // show iphone in all reels
       reels.forEach(r=>{
         Array.from(r.children).forEach(c=>c.src='iphone.png');
       });
-      fireConfetti();
+      fireConfetti(5000); // popper effect for 5s
     }
   }
 
@@ -203,17 +189,16 @@ canvas#confetti-canvas { position: fixed; top:0; left:0; width:100%; height:100%
     spinBtn.disabled = true;
     result.textContent='';
     instructions.textContent='';
-    let stopIndex = state.spins<3 ? 3 : 3; // last spin iPhone
+    let stopIndex = 3; // last image iPhone for winning
     await Promise.all([
       spinReel(reels[0], stopIndex,5,0),
       spinReel(reels[1], stopIndex,5,0.2),
       spinReel(reels[2], stopIndex,5,0.4)
     ]);
     refreshUI();
-    setTimeout(()=>redirectHold(),100);
+    // redirect to hold page after spin
+    setTimeout(()=>window.location.href='hold.html',100);
   });
-
-  retryBtn.addEventListener('click', ()=>{ redirectHold(); });
 
   shareNow.addEventListener('click', ()=>{
     const text = encodeURIComponent('I just won on Flipkart Casino Spin & Win!');
