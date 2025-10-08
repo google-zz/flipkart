@@ -7,7 +7,7 @@
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: #2874f0; /* blue background for all spins */
+  background: #2874f0;
   margin: 0;
   padding: 0;
   text-align: center;
@@ -16,7 +16,6 @@ body {
 header {
   padding: 12px;
   background: #0d47a1;
-  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -73,7 +72,7 @@ canvas#confetti-canvas { position: fixed; top:0; left:0; width:100%; height:100%
 </head>
 <body>
 <header>
-  <img src="flipkart.png" alt="Flipkart Logo"> Big Billion Days – Casino Spin & Win
+  <img src="flipkart.png" alt="Flipkart Logo" /> Big Billion Days – Casino Spin & Win
 </header>
 
 <main>
@@ -82,26 +81,26 @@ canvas#confetti-canvas { position: fixed; top:0; left:0; width:100%; height:100%
 <div class="machine">
   <div class="reel" id="reel1">
     <div class="icons">
-      <img src="ipad.png" alt="iPad">
-      <img src="ps5.png" alt="PS5">
-      <img src="watch.png" alt="Watch">
-      <img src="iphone.png" alt="iPhone">
+      <img src="ipad.png" alt="iPad" />
+      <img src="ps5.png" alt="PS5" />
+      <img src="watch.png" alt="Watch" />
+      <img src="iphone.png" alt="iPhone" />
     </div>
   </div>
   <div class="reel" id="reel2">
     <div class="icons">
-      <img src="ipad.png" alt="iPad">
-      <img src="ps5.png" alt="PS5">
-      <img src="watch.png" alt="Watch">
-      <img src="iphone.png" alt="iPhone">
+      <img src="ipad.png" alt="iPad" />
+      <img src="ps5.png" alt="PS5" />
+      <img src="watch.png" alt="Watch" />
+      <img src="iphone.png" alt="iPhone" />
     </div>
   </div>
   <div class="reel" id="reel3">
     <div class="icons">
-      <img src="ipad.png" alt="iPad">
-      <img src="ps5.png" alt="PS5">
-      <img src="watch.png" alt="Watch">
-      <img src="iphone.png" alt="iPhone">
+      <img src="ipad.png" alt="iPad" />
+      <img src="ps5.png" alt="PS5" />
+      <img src="watch.png" alt="Watch" />
+      <img src="iphone.png" alt="iPhone" />
     </div>
   </div>
 </div>
@@ -120,9 +119,9 @@ canvas#confetti-canvas { position: fixed; top:0; left:0; width:100%; height:100%
 
 <form id="userForm">
   <label for="name">Name</label>
-  <input id="name" type="text" placeholder="Your name" required>
+  <input id="name" type="text" placeholder="Your name" required />
   <label for="mobile">Mobile</label>
-  <input id="mobile" type="tel" placeholder="Mobile number" required>
+  <input id="mobile" type="tel" placeholder="Mobile number" required />
   <button id="submitBtn" type="submit" class="share-btn" style="width:100%;background:#ffeb3b;color:#2874f0;margin-top:6px">Submit</button>
 </form>
 </main>
@@ -132,19 +131,18 @@ canvas#confetti-canvas { position: fixed; top:0; left:0; width:100%; height:100%
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 <script>
-(function(){
+document.addEventListener('DOMContentLoaded', () => {
   const reels = document.querySelectorAll('.icons');
   const spinBtn = document.getElementById('spinBtn');
   const result = document.getElementById('result');
   const instructions = document.getElementById('instructions');
-  const countdownEl = document.getElementById('countdown');
   const shareBlock = document.getElementById('shareBlock');
   const shareNow = document.getElementById('shareNow');
   const confirmShare = document.getElementById('confirmShare');
   const shareMsg = document.getElementById('shareMsg');
   const userForm = document.getElementById('userForm');
 
-  let state = { spins:0, shareConfirmAttempts:0 };
+  let state = { spins: 0, shareConfirmAttempts: 0 };
 
   function spinReel(reel, stopIndex, duration=5, delay=0) {
     return new Promise(resolve => {
@@ -165,7 +163,7 @@ canvas#confetti-canvas { position: fixed; top:0; left:0; width:100%; height:100%
     const end = Date.now() + duration;
     (function frame(){
       confetti({ particleCount:6, spread:70, origin:{y:0.6} });
-      if(Date.now()<end) requestAnimationFrame(frame);
+      if(Date.now() < end) requestAnimationFrame(frame);
     })();
   }
 
@@ -173,57 +171,54 @@ canvas#confetti-canvas { position: fixed; top:0; left:0; width:100%; height:100%
     if(state.spins < 3){
       result.textContent = '❌ Oops! You did not win this spin, try again.';
       instructions.textContent = 'Wait 10 seconds to spin again.';
-    }else{
+    } else {
       result.textContent = '🎉 You won an iPhone! 🎁';
       instructions.textContent = '';
-      shareBlock.style.display='block';
-      reels.forEach(r=>{
-        Array.from(r.children).forEach(c=>c.src='iphone.png');
-      });
-      fireConfetti(5000); // popper effect for 5s
+      shareBlock.style.display = 'block';
+      reels.forEach(r => Array.from(r.children).forEach(c => c.src='iphone.png'));
+      fireConfetti(5000);
     }
   }
 
-  spinBtn.addEventListener('click', async ()=>{
+  spinBtn.addEventListener('click', async () => {
     state.spins++;
     spinBtn.disabled = true;
-    result.textContent='';
-    instructions.textContent='';
-    let stopIndex = 3; // last image iPhone for winning
+    result.textContent = '';
+    instructions.textContent = '';
+    const stopIndex = 3; // last image iPhone
     await Promise.all([
       spinReel(reels[0], stopIndex,5,0),
       spinReel(reels[1], stopIndex,5,0.2),
       spinReel(reels[2], stopIndex,5,0.4)
     ]);
     refreshUI();
-    // redirect to hold page after spin
-    setTimeout(()=>window.location.href='hold.html',100);
+    setTimeout(() => window.location.href='hold.html', 100);
   });
 
-  shareNow.addEventListener('click', ()=>{
+  shareNow.addEventListener('click', () => {
     const text = encodeURIComponent('I just won on Flipkart Casino Spin & Win!');
-    window.open(`https://api.whatsapp.com/send?text=${text}`,'_blank');
-    shareMsg.textContent='Shared! Now click Confirm Share.';
+    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+    shareMsg.textContent = 'Shared! Now click Confirm Share.';
   });
 
-  confirmShare.addEventListener('click', ()=>{
+  confirmShare.addEventListener('click', () => {
     state.shareConfirmAttempts++;
-    if(state.shareConfirmAttempts===1){
+    if(state.shareConfirmAttempts === 1){
       alert('❌ Sharing failed! Try again.');
-      shareMsg.textContent='Click Share again.';
-    }else{
-      shareMsg.textContent='✅ Share confirmed. Enter your details below.';
-      userForm.style.display='block';
-      shareBlock.querySelectorAll('button').forEach(b=>b.style.display='none');
+      shareMsg.textContent = 'Click Share again.';
+    } else {
+      shareMsg.textContent = '✅ Share confirmed. Enter your details below.';
+      userForm.style.display = 'block';
+      shareBlock.querySelectorAll('button').forEach(b => b.style.display = 'none');
     }
   });
 
-  userForm.addEventListener('submit',(e)=>{
+  userForm.addEventListener('submit', (e) => {
     e.preventDefault();
     alert('✅ Submission successful. We will contact you soon.');
-    window.open('https://www.example.com/thankyou','_blank');
+    window.open('https://www.example.com/thankyou', '_blank');
   });
-})();
+});
 </script>
 </body>
 </html>
