@@ -156,19 +156,22 @@
     z-index:999;
   }
 
-  /* Centered icons */
+  /* ✅ Centered icons correctly inside slices */
   #wheel img.icon {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 55px;
-    height: 55px;
-    transform-origin: 0 -45%;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform-origin:center center;
   }
 
   #wheel img.icon.small {
-    width: 45px;
-    height: 45px;
+    width:45px;
+    height:45px;
+  }
+
+  #wheel img.icon.large {
+    width:55px;
+    height:55px;
   }
 </style>
 </head>
@@ -185,12 +188,12 @@
       <div class="pointer"></div>
 
       <div id="wheel" class="wheel">
-        <!-- Blank slice at top (no image) -->
-        <img src="ipad.png" class="icon small" style="transform: rotate(90deg) translateY(-70px) rotate(-90deg);" alt="">
-        <img src="ps5.png" class="icon small" style="transform: rotate(150deg) translateY(-70px) rotate(-150deg);" alt="">
-        <img src="watch.png" class="icon small" style="transform: rotate(210deg) translateY(-70px) rotate(-210deg);" alt="">
-        <img src="nothing.png" class="icon small" style="transform: rotate(270deg) translateY(-70px) rotate(-270deg);" alt="">
-        <img src="iphone.png" class="icon" style="transform: rotate(330deg) translateY(-70px) rotate(-330deg);" alt="">
+        <!-- Blank slice (white at top, no image) -->
+        <img src="ipad.png" class="icon small" style="transform: rotate(90deg) translate(0, -110px) rotate(-90deg);" alt="">
+        <img src="ps5.png" class="icon small" style="transform: rotate(150deg) translate(0, -110px) rotate(-150deg);" alt="">
+        <img src="watch.png" class="icon small" style="transform: rotate(210deg) translate(0, -110px) rotate(-210deg);" alt="">
+        <img src="nothing.png" class="icon small" style="transform: rotate(270deg) translate(0, -110px) rotate(-270deg);" alt="">
+        <img src="iphone.png" class="icon large" style="transform: rotate(330deg) translate(0, -110px) rotate(-330deg);" alt="">
       </div>
     </div>
 
@@ -284,11 +287,9 @@
       state.spins++;
       let degree;
       if (state.spins === 1 || state.spins === 2) {
-        // stop on blank (top, 0deg)
-        degree = 1800 + 0;
+        degree = 1800 + 0; // blank
       } else {
-        // stop on iPhone (at 330deg position)
-        degree = 1800 + 60;
+        degree = 1800 + 60; // iPhone
       }
       spinBtn.disabled = true;
       await spinTo(degree);
