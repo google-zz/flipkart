@@ -14,33 +14,48 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    gap: 20px;
   }
 
   button {
     background: #ffeb3b;
     color: #2874f0;
     border: none;
-    padding: 14px 24px;
+    padding: 14px 28px;
     border-radius: 10px;
     font-size: 1.2rem;
     cursor: pointer;
     display: none;
   }
+
+  .countdown {
+    font-size: 1.5rem;
+  }
 </style>
 </head>
 <body>
-  <h2>⏳ Please wait 10 seconds...</h2>
-  <p>Loading your next spin...</p>
+  <h2>⏳ Oops! You didn’t win this spin</h2>
+  <p>Please wait for the countdown to spin again</p>
+  <div class="countdown" id="countdown">10</div>
   <button id="retryBtn">Retry</button>
 
   <script>
-    setTimeout(() => {
-      const btn = document.getElementById('retryBtn');
-      btn.style.display = 'inline-block';
-      btn.addEventListener('click', () => {
-        window.location.href = "index.html";
-      });
-    }, 10000);
+    let countdown = 10;
+    const countdownEl = document.getElementById('countdown');
+    const retryBtn = document.getElementById('retryBtn');
+
+    const interval = setInterval(() => {
+      countdown--;
+      countdownEl.textContent = countdown;
+      if(countdown <= 0){
+        clearInterval(interval);
+        countdownEl.style.display = 'none';
+        retryBtn.style.display = 'inline-block';
+        retryBtn.addEventListener('click', () => {
+          window.location.href = "index.html"; // redirect back to spin page
+        });
+      }
+    }, 1000);
   </script>
 </body>
 </html>
