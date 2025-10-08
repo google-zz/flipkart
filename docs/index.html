@@ -3,46 +3,57 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Flipkart Casino Slot – Spin & Win</title>
+<title>Flipkart Casino Spin & Win</title>
 <style>
   body {
     font-family: Arial, sans-serif;
-    background: radial-gradient(circle at top, #1a237e, #000);
-    color: #fff;
-    text-align: center;
+    background: #2874f0;
     margin: 0;
     padding: 0;
+    text-align: center;
+    color: #fff;
   }
 
   header {
-    padding: 16px;
-    background: #2874f0;
-    font-weight: bold;
-    letter-spacing: 1px;
+    padding: 12px;
+    background: #0d47a1;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  header img {
+    height: 34px;
+  }
+
+  main {
+    padding: 20px;
   }
 
   .machine {
     display: flex;
     justify-content: center;
-    gap: 10px;
-    margin-top: 40px;
+    gap: 12px;
+    margin: 40px auto;
     perspective: 1000px;
   }
 
   .reel {
     width: 100px;
     height: 120px;
-    border: 4px solid #ffeb3b;
+    border: 4px solid gold;
     border-radius: 12px;
     overflow: hidden;
-    background: #111;
-    box-shadow: inset 0 0 10px #000, 0 0 20px #ffeb3b;
+    background: #000;
+    box-shadow: inset 0 0 12px #000, 0 0 20px gold;
   }
 
   .icons {
     position: relative;
     top: 0;
-    transition: top 1s ease-out;
+    transition: top 5s cubic-bezier(.2,.8,.2,1);
   }
 
   .icons img {
@@ -54,22 +65,80 @@
   }
 
   #spinBtn {
-    margin-top: 24px;
-    padding: 14px 30px;
-    font-size: 1.2rem;
-    font-weight: bold;
-    color: #222;
     background: #ffeb3b;
-    border: none;
-    border-radius: 8px;
+    color: #2874f0;
+    padding: 14px 28px;
+    border-radius: 10px;
+    border: 0;
+    font-weight: 800;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(255,255,255,0.3);
+    font-size: 1.1rem;
+    margin-top: 16px;
   }
 
   #result {
-    margin-top: 20px;
-    font-size: 1.3rem;
-    font-weight: bold;
+    margin-top: 18px;
+    font-size: 1.2rem;
+    min-height: 28px;
+    color: #fff;
+  }
+
+  #instructions {
+    margin-top: 10px;
+    color: #fff;
+  }
+
+  #retryBtn {
+    display: none;
+    margin-top: 16px;
+    padding: 10px 18px;
+    background: #fff;
+    color: #2874f0;
+    border: 0;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  #shareBlock {
+    display: none;
+    margin-top: 16px;
+  }
+
+  .share-btn {
+    background: #25D366;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    border: 0;
+    cursor: pointer;
+    margin: 6px;
+  }
+
+  #confirmShare {
+    background: #1976d2;
+  }
+
+  #userForm {
+    display: none;
+    margin-top: 14px;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: left;
+  }
+
+  #userForm input {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+  }
+
+  footer {
+    padding: 14px;
+    font-size: 0.85rem;
+    color: #fff;
   }
 
   canvas#confetti-canvas {
@@ -82,102 +151,188 @@
 </style>
 </head>
 <body>
+  <header>
+    <img src="flipkart.png" alt="Flipkart Logo"> Big Billion Days – Casino Spin &amp; Win
+  </header>
 
-<header>🎰 Flipkart Slot Machine – Spin & Win</header>
+  <main>
+    <p>You have <strong>3 spins</strong>.</p>
 
-<div class="machine">
-  <div class="reel" id="reel1">
-    <div class="icons">
-      <img src="nothing.png" alt="">
-      <img src="ipad.png" alt="">
-      <img src="ps5.png" alt="">
-      <img src="watch.png" alt="">
-      <img src="iphone.png" alt="">
+    <div class="machine">
+      <div class="reel" id="reel1">
+        <div class="icons">
+          <img src="xmark.png" alt="X">
+          <img src="ipad.png" alt="iPad">
+          <img src="ps5.png" alt="PS5">
+          <img src="watch.png" alt="Watch">
+          <img src="iphone.png" alt="iPhone">
+        </div>
+      </div>
+      <div class="reel" id="reel2">
+        <div class="icons">
+          <img src="xmark.png" alt="X">
+          <img src="ipad.png" alt="iPad">
+          <img src="ps5.png" alt="PS5">
+          <img src="watch.png" alt="Watch">
+          <img src="iphone.png" alt="iPhone">
+        </div>
+      </div>
+      <div class="reel" id="reel3">
+        <div class="icons">
+          <img src="xmark.png" alt="X">
+          <img src="ipad.png" alt="iPad">
+          <img src="ps5.png" alt="PS5">
+          <img src="watch.png" alt="Watch">
+          <img src="iphone.png" alt="iPhone">
+        </div>
+      </div>
     </div>
-  </div>
 
-  <div class="reel" id="reel2">
-    <div class="icons">
-      <img src="nothing.png" alt="">
-      <img src="ipad.png" alt="">
-      <img src="ps5.png" alt="">
-      <img src="watch.png" alt="">
-      <img src="iphone.png" alt="">
+    <button id="spinBtn">SPIN</button>
+    <div id="result"></div>
+    <div id="instructions"></div>
+    <button id="retryBtn">Retry</button>
+
+    <div id="shareBlock">
+      <p><strong>To claim, please share:</strong></p>
+      <button id="shareNow" class="share-btn">Share via WhatsApp</button>
+      <button id="confirmShare" class="share-btn">Confirm Share</button>
+      <div id="shareMsg"></div>
     </div>
-  </div>
 
-  <div class="reel" id="reel3">
-    <div class="icons">
-      <img src="nothing.png" alt="">
-      <img src="ipad.png" alt="">
-      <img src="ps5.png" alt="">
-      <img src="watch.png" alt="">
-      <img src="iphone.png" alt="">
-    </div>
-  </div>
-</div>
+    <form id="userForm">
+      <label for="name">Name</label>
+      <input id="name" type="text" placeholder="Your name" required>
+      <label for="mobile">Mobile</label>
+      <input id="mobile" type="tel" placeholder="Mobile number" required>
+      <button id="submitBtn" type="submit" class="share-btn" style="width:100%;background:#ffeb3b;color:#2874f0;margin-top:6px">Submit</button>
+    </form>
+  </main>
 
-<button id="spinBtn">SPIN</button>
-<div id="result"></div>
+  <footer>© Spin & Win Project</footer>
+  <canvas id="confetti-canvas"></canvas>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-<canvas id="confetti-canvas"></canvas>
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+  (function(){
+    const reels = document.querySelectorAll('.icons');
+    const spinBtn = document.getElementById('spinBtn');
+    const result = document.getElementById('result');
+    const instructions = document.getElementById('instructions');
+    const retryBtn = document.getElementById('retryBtn');
+    const shareBlock = document.getElementById('shareBlock');
+    const shareNow = document.getElementById('shareNow');
+    const confirmShare = document.getElementById('confirmShare');
+    const shareMsg = document.getElementById('shareMsg');
+    const userForm = document.getElementById('userForm');
 
-<script>
-const reels = document.querySelectorAll('.icons');
-const spinBtn = document.getElementById('spinBtn');
-const result = document.getElementById('result');
-let spins = 0;
+    let state = { spins:0, shareConfirmAttempts:0 };
 
-function spinReel(reel, stopIndex, delay) {
-  return new Promise(resolve => {
-    let totalItems = reel.children.length;
-    let itemHeight = 120;
-    let rounds = 4; // how many times it scrolls through
-    let distance = (rounds * totalItems + stopIndex) * itemHeight;
-    reel.style.transition = 'none';
-    reel.style.top = '0px';
-    void reel.offsetWidth; // force reflow
-    reel.style.transition = `top 1s ease-out ${delay}s`;
-    reel.style.top = `-${distance}px`;
-    setTimeout(resolve, (1 + delay) * 1000);
-  });
-}
+    function spinReel(reel, stopIndex, delay) {
+      return new Promise(resolve => {
+        const total = reel.children.length;
+        const itemHeight = 120;
+        const rounds = 6; // how many full spins
+        const distance = (rounds * total + stopIndex) * itemHeight;
+        reel.style.transition = 'none';
+        reel.style.top = '0px';
+        void reel.offsetWidth;
+        reel.style.transition = `top 5s cubic-bezier(.2,.8,.2,1) ${delay}s`;
+        reel.style.top = `-${distance}px`;
+        setTimeout(resolve, (5 + delay) * 1000);
+      });
+    }
 
-function fireConfetti() {
-  const duration = 3 * 1000;
-  const end = Date.now() + duration;
-  (function frame() {
-    confetti({ particleCount: 6, spread: 70, origin: { y: 0.6 } });
-    if (Date.now() < end) requestAnimationFrame(frame);
+    function fireConfetti() {
+      const duration = 3 * 1000;
+      const end = Date.now() + duration;
+      (function frame() {
+        confetti({ particleCount: 6, spread: 70, origin: { y: 0.6 } });
+        if (Date.now() < end) requestAnimationFrame(frame);
+      })();
+    }
+
+    function refreshUI() {
+      if (state.spins === 1) {
+        result.textContent = '❌ Oops! Try again.';
+        instructions.textContent = 'Scroll down and click Retry to spin again.';
+        retryBtn.style.display = 'inline-block';
+        scrollToBottom();
+      } else if (state.spins === 2) {
+        result.textContent = '❌ Still no luck!';
+        instructions.textContent = 'Scroll down and Retry after ad.';
+        retryBtn.style.display = 'inline-block';
+        scrollToBottom();
+      } else if (state.spins >= 3) {
+        result.textContent = '🎉 JACKPOT! You won an iPhone 🎁';
+        retryBtn.style.display = 'none';
+        shareBlock.style.display = 'block';
+        fireConfetti();
+      }
+    }
+
+    function scrollToBottom() {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    spinBtn.addEventListener('click', async () => {
+      state.spins++;
+      spinBtn.disabled = true;
+      result.textContent = '';
+      let stopIndex = 0; // xmark
+      if (state.spins === 3) stopIndex = 4; // iphone
+      await Promise.all([
+        spinReel(reels[0], stopIndex, 0),
+        spinReel(reels[1], stopIndex, 0.3),
+        spinReel(reels[2], stopIndex, 0.6)
+      ]);
+      refreshUI();
+      spinBtn.disabled = false;
+    });
+
+    retryBtn.addEventListener('click', () => {
+      window.open("https://example.com/ad-page", "_blank");
+      let time = 10;
+      retryBtn.disabled = true;
+      retryBtn.textContent = `Retry (${time})`;
+      const timer = setInterval(() => {
+        time--;
+        retryBtn.textContent = `Retry (${time})`;
+        if (time <= 0) {
+          clearInterval(timer);
+          retryBtn.disabled = false;
+          retryBtn.textContent = "Retry";
+          spinBtn.disabled = false;
+          retryBtn.style.display = "none";
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }, 1000);
+    });
+
+    shareNow.addEventListener('click', () => {
+      const text = encodeURIComponent('I just won on Flipkart Casino Spin & Win!');
+      window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
+      shareMsg.textContent = 'Shared! Now click Confirm Share.';
+    });
+
+    confirmShare.addEventListener('click', () => {
+      state.shareConfirmAttempts++;
+      if (state.shareConfirmAttempts === 1) {
+        shareMsg.textContent = 'Verification failed. Please share again.';
+        alert('Share verification failed. Try again.');
+      } else {
+        shareMsg.textContent = '✅ Share confirmed. Enter your details below.';
+        userForm.style.display = 'block';
+        shareBlock.querySelectorAll('button').forEach(b => b.style.display = 'none');
+      }
+    });
+
+    userForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      alert('✅ Submission successful. You will be contacted soon.');
+      window.open('https://www.example.com/thankyou', '_blank');
+    });
   })();
-}
-
-spinBtn.addEventListener('click', async () => {
-  spins++;
-  spinBtn.disabled = true;
-  result.textContent = '';
-
-  // stopIndex corresponds to order in the list (0=nothing, 4=iphone)
-  let stopIndex = 0; // blank by default
-  if (spins === 3) stopIndex = 4; // iphone
-
-  // spin all three wheels
-  await Promise.all([
-    spinReel(reels[0], stopIndex, 0),
-    spinReel(reels[1], stopIndex, 0.2),
-    spinReel(reels[2], stopIndex, 0.4)
-  ]);
-
-  if (spins < 3) {
-    result.textContent = "❌ No luck, try again!";
-  } else {
-    result.textContent = "🎉 JACKPOT! You won iPhones!";
-    fireConfetti();
-  }
-
-  spinBtn.disabled = false;
-});
-</script>
+  </script>
 </body>
 </html>
