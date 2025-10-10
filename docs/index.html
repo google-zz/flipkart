@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Flipkart Casino Spin & Win</title>
+<title>Flipkart Diwali Spin & Win</title>
 <style>
 body {
   font-family: Arial, sans-serif;
-  background: #2874f0;
+  background: #fff;
   margin: 0;
   padding: 0;
   text-align: center;
-  color: #fff;
+  color: #000;
 }
 header {
   padding: 12px;
@@ -20,6 +20,7 @@ header {
   align-items: center;
   justify-content: center;
   gap: 10px;
+  color: #fff;
 }
 header img { height: 34px; }
 main { padding: 20px; }
@@ -47,83 +48,161 @@ main { padding: 20px; }
   object-fit: contain;
   background: #000;
 }
-#spinBtn {
+#spinBtn,
+#submitBtn
+ {
   background: #ffeb3b;
   color: #2874f0;
-  padding: 14px 28px;
   border-radius: 10px;
   border: 0;
   font-weight: 800;
-  cursor: pointer;
   font-size: 1.1rem;
+}
+
+#userForm input{
+    background: #d8d8d8;
+  color: #000000;
+  border-radius: 10px;
+  border: 0.2;
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+#spinBtn {
+  padding: 14px 28px;
+  cursor: pointer;
   margin-top: 16px;
 }
+#spinBtn.disabled {
+  background: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
+#userForm input {
+  width: 90%;
+  padding: 12px;
+  margin: 8px 0;
+  font-weight: normal;
+  border: none;
+}
+#submitBtn {
+  width: 100%;
+  padding: 14px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+#spinsLeft { font-weight: bold; font-size: 1.2rem; margin-bottom: 12px; }
 #result { margin-top: 18px; font-size: 1.2rem; min-height: 28px; }
-#instructions { margin-top: 10px; }
-#shareBlock { display: none; margin-top: 16px; }
-.share-btn { background: #25D366; color: #fff; padding: 10px 16px; border-radius: 8px; border: 0; cursor: pointer; margin: 6px; }
-#confirmShare { background: #1976d2; }
-#userForm { display: none; margin-top: 14px; max-width: 320px; margin-left:auto; margin-right:auto; text-align:left; }
-#userForm input { width:100%; padding:10px; margin:8px 0; border-radius:6px; border:1px solid #ccc; }
-footer { padding: 14px; font-size: 0.85rem; color: #fff; }
+#instructions { margin-top: 10px; margin-bottom: 12px; }
+#adSlot { margin: 10px 0; padding: 12px; border: 2px dashed #999; color: #555; font-style: italic; }
+footer { padding: 14px; font-size: 0.85rem; color: #000; }
 canvas#confetti-canvas { position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:999; }
-.countdown { font-size: 1.3rem; margin-top: 12px; }
+
+/* Popup styles */
+#popupOverlay, #winPopupOverlay, #shareFailPopup {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+#popupBox, #winPopupBox, #failBox {
+  background: #fff;
+  color: #000;
+  padding: 24px;
+  border-radius: 12px;
+  max-width: 360px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+#popupBox h2, #failBox h3 { color: #2874f0; }
+#okBtn {
+  background: #ffeb3b;
+  color: #2874f0;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: bold;
+  cursor: pointer;
+  display: block;
+  margin: 18px auto 0;
+  font-size: 1rem;
+}
+.share-btn {
+  background: #25D366;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 0;
+  cursor: pointer;
+  margin: 6px;
+}
+#confirmShareBtn { background: #1976d2; }
+#shareAgainBtn { background: red; color: #fff; border: none; border-radius: 8px; padding: 10px 16px; cursor: pointer; margin-top: 10px; }
+#claimBtn { background: #28a745; color: #fff; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; margin-top: 10px; }
 </style>
 </head>
 <body>
 <header>
-  <img src="flipkart.png" alt="Flipkart Logo" /> Big Billion Days – Casino Spin & Win
+  <img src="flipkart.png" alt="Flipkart Logo" /> Flipkart – Diwali Spin & Win
 </header>
 
+<!-- Welcome Popup -->
+<div id="popupOverlay">
+  <div id="popupBox">
+    <h2>🎯 How to Play</h2>
+    <ul style="text-align:left;line-height:1.6">
+      <li>You have <strong>3 spins</strong> to try your luck.</li>
+      <li>Click <strong>SPIN</strong> to start — reels will scroll for 5 seconds.</li>
+      <li>If you don’t win, wait for 10 seconds to retry.</li>
+      <li>When you win, share with friends and submit your details.</li>
+    </ul>
+    <button id="okBtn">OK, Let’s Play!</button>
+  </div>
+</div>
+
+<!-- Winning Popup -->
+<div id="winPopupOverlay" style="display:none;">
+  <div id="winPopupBox">
+    <img id="prizeImg" src="iphone.png" alt="Prize" style="width:120px;height:auto;margin-bottom:10px;">
+    <h2>🎉 Congratulations!</h2>
+    <p>You won a <strong id="prizeName">Prize!</strong></p>
+    <p>To claim reward, share with 5 friends.</p>
+    <button id="shareNowBtn" class="share-btn">Share via WhatsApp</button>
+    <button id="confirmShareBtn" class="share-btn" style="display:none;">Confirm Share</button>
+    <button id="claimBtn" style="display:none;">Claim Reward</button>
+  </div>
+</div>
+
+<!-- Share Fail Popup -->
+<div id="shareFailPopup" style="display:none;">
+  <div id="failBox">
+    <h3>❌ Share Failed</h3>
+    <p>Please share again to claim your prize.</p>
+    <button id="shareAgainBtn">Share Again</button>
+  </div>
+</div>
+
 <main>
-<p>You have <strong>3 spins</strong>.</p>
-
-<div class="machine">
-  <div class="reel" id="reel1">
-    <div class="icons">
-      <img src="ipad.png" alt="iPad" />
-      <img src="ps5.png" alt="PS5" />
-      <img src="watch.png" alt="Watch" />
-      <img src="iphone.png" alt="iPhone" />
-    </div>
+  <br><br><br><br><br><br><br><br>
+  <p id="spinsLeft">Spins left: <strong>3</strong></p>
+  <div class="machine">
+    <div class="reel" id="reel1"><div class="icons"><img src="ipad.png"><img src="ps5.png"><img src="watch.png"><img src="iphone.png"></div></div>
+    <div class="reel" id="reel2"><div class="icons"><img src="ipad.png"><img src="ps5.png"><img src="watch.png"><img src="iphone.png"></div></div>
+    <div class="reel" id="reel3"><div class="icons"><img src="ipad.png"><img src="ps5.png"><img src="watch.png"><img src="iphone.png"></div></div>
   </div>
-  <div class="reel" id="reel2">
-    <div class="icons">
-      <img src="ipad.png" alt="iPad" />
-      <img src="ps5.png" alt="PS5" />
-      <img src="watch.png" alt="Watch" />
-      <img src="iphone.png" alt="iPhone" />
-    </div>
-  </div>
-  <div class="reel" id="reel3">
-    <div class="icons">
-      <img src="ipad.png" alt="iPad" />
-      <img src="ps5.png" alt="PS5" />
-      <img src="watch.png" alt="Watch" />
-      <img src="iphone.png" alt="iPhone" />
-    </div>
-  </div>
-</div>
+  <button id="spinBtn">SPIN</button>
+  <div id="result"></div>
+  <div id="instructions"></div>
 
-<button id="spinBtn">SPIN</button>
-<div id="result"></div>
-<div id="instructions"></div>
-<div class="countdown" id="countdown"></div>
-
-<div id="shareBlock">
-  <p><strong>To claim, please share to 5 friends:</strong></p>
-  <button id="shareNow" class="share-btn">Share via WhatsApp</button>
-  <button id="confirmShare" class="share-btn">Confirm Share</button>
-  <div id="shareMsg"></div>
-</div>
-
-<form id="userForm">
-  <label for="name">Name</label>
-  <input id="name" type="text" placeholder="Your name" required />
-  <label for="mobile">Mobile</label>
-  <input id="mobile" type="tel" placeholder="Mobile number" required />
-  <button id="submitBtn" type="submit" class="share-btn" style="width:100%;background:#ffeb3b;color:#2874f0;margin-top:6px">Submit</button>
-</form>
+  <form id="userForm" style="display:none;">
+    <label>Name</label><input id="name" type="text" required>
+    <label>Mobile</label><input id="mobile" type="tel" required>
+    <button id="submitBtn" type="submit">Submit</button>
+  </form>
 </main>
 
 <footer>© Spin & Win Project</footer>
@@ -135,109 +214,118 @@ document.addEventListener('DOMContentLoaded', () => {
   const reels = document.querySelectorAll('.icons');
   const spinBtn = document.getElementById('spinBtn');
   const result = document.getElementById('result');
-  const instructions = document.getElementById('instructions');
-  const shareBlock = document.getElementById('shareBlock');
-  const shareNow = document.getElementById('shareNow');
-  const confirmShare = document.getElementById('confirmShare');
-  const shareMsg = document.getElementById('shareMsg');
+  const popupOverlay = document.getElementById('popupOverlay');
+  const okBtn = document.getElementById('okBtn');
+  const winPopup = document.getElementById('winPopupOverlay');
+  const shareNowBtn = document.getElementById('shareNowBtn');
+  const confirmShareBtn = document.getElementById('confirmShareBtn');
+  const claimBtn = document.getElementById('claimBtn');
+  const shareFailPopup = document.getElementById('shareFailPopup');
+  const shareAgainBtn = document.getElementById('shareAgainBtn');
   const userForm = document.getElementById('userForm');
+  const spinsLeft = document.getElementById('spinsLeft');
+  const prizeImg = document.getElementById('prizeImg');
+  const prizeName = document.getElementById('prizeName');
 
-  let state = { spins: 0, shareConfirmAttempts: 0 };
+  let state = { spins: 0, maxSpins: 3, shareAttempt: 0 };
+  const prizes = [
+    { name: 'iPhone', img: 'iphone.png' },
+    { name: 'iPad', img: 'ipad.png' },
+    { name: 'PS5', img: 'ps5.png' },
+    { name: 'Apple Watch', img: 'watch.png' }
+  ];
+
+  okBtn.onclick = () => popupOverlay.style.display = 'none';
 
   function loopReel(reel, duration=5) {
-    const imgs = Array.from(reel.children);
-    let idx = 0;
-    const intervalTime = 100;
-    return new Promise(resolve => {
-      const interval = setInterval(() => {
-        imgs.forEach(img => img.style.display = 'none');
-        imgs[idx % imgs.length].style.display = 'block';
-        idx++;
-      }, intervalTime);
-      setTimeout(() => {
-        clearInterval(interval);
-        resolve();
-      }, duration * 1000);
+    const imgs = reel.children;
+    let i = 0;
+    return new Promise(res => {
+      const inter = setInterval(() => {
+        for (let j=0;j<imgs.length;j++) imgs[j].style.display='none';
+        imgs[i % imgs.length].style.display='block';
+        i++;
+      }, 100);
+      setTimeout(() => { clearInterval(inter); res(); }, duration*1000);
     });
   }
 
-  function stopReelAt(reel, stopIndex) {
-    const imgs = Array.from(reel.children);
-    imgs.forEach((img, i) => img.style.display = (i === stopIndex) ? 'block' : 'none');
-  }
-
-  function fireConfetti(duration=3000) {
-    const end = Date.now() + duration;
-    (function frame(){
-      confetti({ particleCount:6, spread:70, origin:{y:0.6} });
-      if(Date.now() < end) requestAnimationFrame(frame);
+  function fireConfetti() {
+    const end = Date.now() + 3000;
+    (function frame() {
+      confetti({ particleCount: 10, spread: 160 });
+      if (Date.now() < end) requestAnimationFrame(frame);
     })();
   }
 
-  function refreshUI() {
-    if(state.spins < 3){
-      result.textContent = '❌ Oops! You did not win this spin, try again.';
-      instructions.textContent = 'Wait 10 seconds to spin again.';
-    } else {
-      result.textContent = '🎉 You won an iPhone! 🎁';
-      instructions.textContent = '';
-      shareBlock.style.display = 'block';
-      reels.forEach(r => Array.from(r.children).forEach(c => c.src='iphone.png'));
-      fireConfetti(5000);
-    }
+  function updateSpinsLeft() {
+    spinsLeft.innerHTML = `Spins left: <strong>${state.maxSpins - state.spins}</strong>`;
   }
 
-  spinBtn.addEventListener('click', async () => {
+  spinBtn.onclick = async () => {
+    if (state.spins >= state.maxSpins) return;
     state.spins++;
+    updateSpinsLeft();
     spinBtn.disabled = true;
     result.textContent = '';
-    instructions.textContent = '';
 
-    await Promise.all([
-      loopReel(reels[0], 5),
-      loopReel(reels[1], 5),
-      loopReel(reels[2], 5)
-    ]);
+    await Promise.all([...reels].map(r => loopReel(r, 5)));
 
-    // first 2 spins stop blank and go to hold page
-    if(state.spins < 3){
-      reels.forEach(r => r.querySelectorAll('img').forEach(img => img.style.display='none'));
-      refreshUI();
-      setTimeout(() => window.location.href='hold.html', 100);
+    if (state.spins < 3) {
+      // 🎯 Show empty black slot on first two spins
+      reels.forEach(r => [...r.children].forEach(img => img.style.display = 'none'));
+      result.textContent = '❌ Oops! Try again after 10s.';
+      let t=10;
+      const timer=setInterval(()=>{
+        spinBtn.textContent=`Retry in ${t}s`;
+        if(--t<0){clearInterval(timer);spinBtn.textContent='SPIN';spinBtn.disabled=false;}
+      },1000);
     } else {
-      // third spin wins iPhone
-      const stopIndex = 3;
-      reels.forEach(r => stopReelAt(r, stopIndex));
-      refreshUI();
-      // do NOT redirect, allow share & confirm logic
+      const randomPrize = prizes[Math.floor(Math.random() * prizes.length)];
+      reels.forEach(r=>[...r.children].forEach((img,i)=>img.style.display=i===3?'block':'none'));
+      prizeImg.src = randomPrize.img;
+      prizeName.textContent = randomPrize.name;
+      result.textContent=`🎉 You won a ${randomPrize.name}!`;
+      fireConfetti();
+      winPopup.style.display='flex';
     }
+  };
 
-    spinBtn.disabled = false;
-  });
+  shareNowBtn.onclick = () => {
+    const msg = encodeURIComponent("Hey I won a prize on this website!");
+    window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
+    shareNowBtn.style.display = 'none';
+    confirmShareBtn.style.display = 'inline-block';
+  };
 
-  shareNow.addEventListener('click', () => {
-    const text = encodeURIComponent('I just won on Flipkart Casino Spin & Win!');
-    window.open(`https://api.whatsapp.com/send?text=${text}`, '_blank');
-    shareMsg.textContent = 'Shared! Now click Confirm Share.';
-  });
-
-  confirmShare.addEventListener('click', () => {
-    state.shareConfirmAttempts++;
-    if(state.shareConfirmAttempts === 1){
-      alert('❌ Sharing failed! Try again.');
-      shareMsg.textContent = 'Click Share again.';
+  confirmShareBtn.onclick = () => {
+    state.shareAttempt++;
+    if (state.shareAttempt === 1) {
+      winPopup.style.display = 'none';
+      shareFailPopup.style.display = 'flex';
     } else {
-      shareMsg.textContent = '✅ Share confirmed. Enter your details below.';
-      userForm.style.display = 'block';
-      shareBlock.querySelectorAll('button').forEach(b => b.style.display = 'none');
+      confirmShareBtn.style.display = 'none';
+      claimBtn.style.display = 'inline-block';
     }
-  });
+  };
 
-  userForm.addEventListener('submit', (e) => {
+  shareAgainBtn.onclick = () => {
+    const msg = encodeURIComponent("Hey I won a prize on this website!");
+    window.open(`https://api.whatsapp.com/send?text=${msg}`, '_blank');
+    shareFailPopup.style.display = 'none';
+    winPopup.style.display = 'flex';
+  };
+
+  claimBtn.onclick = () => {
+    winPopup.style.display = 'none';
+    userForm.style.display = 'block';
+  };
+
+  userForm.onsubmit = e => {
     e.preventDefault();
-    alert('✅ Submission successful. We will contact you soon.');
-    window.open('https://www.example.com/thankyou', '_blank');
-  });
+    alert('✅ Details submitted successfully!');
+    window.open('https://example.com/adpage', '_blank');
+  };
 });
 </script>
 </body>
